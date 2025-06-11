@@ -1,9 +1,12 @@
-# PocketMoney Dashboards
+# PocketMoney Tools
 
-Pushing [PocketMoney](https://apps.apple.com/us/app/pocketmoney/id1281288102) transactions to `(OpenSearch|PostgreSQL|?)` and visualizing it with `(OpenSearch Dashboards|Grafana|?)`
+Random tools for [PocketMoney](https://apps.apple.com/us/app/pocketmoney/id1281288102) databases
 
+## Dashboards
 
-## Usage
+Pushing transactions to `(OpenSearch|PostgreSQL|?)` and visualizing it with `(OpenSearch Dashboards|Grafana|?)`
+
+### Usage
 
 1. Backup DB to iCloud (or Dropbox or whatever)
 1. Run `./refresh_from_icloud.py`

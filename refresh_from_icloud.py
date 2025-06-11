@@ -10,11 +10,11 @@ import click
 
 @classyclick.command()
 class RefreshFromiCloud:
-    icloud_dir: Path = classyclick.option(
+    icloud_dir: Path = classyclick.Option(
         default=Path.home() / 'Library/Mobile Documents/iCloud~com~pocketmoney~app/Synchronization/',
         help='Path to the PocketMoney iCloud Mobile Documents directory',
     )
-    output: Path = classyclick.option(default=Path.cwd() / 'pocketmoney.pmdb', help='Path to the output file')
+    output: Path = classyclick.Option(default=Path.cwd() / 'pocketmoney.pmdb', help='Path to the output file')
 
     def __call__(self):
         zipfiles = list(self.icloud_dir.glob('*.zip'))
@@ -45,4 +45,4 @@ class RefreshFromiCloud:
 
 
 if __name__ == '__main__':
-    RefreshFromiCloud()
+    RefreshFromiCloud.click()

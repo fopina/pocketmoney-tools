@@ -15,14 +15,14 @@ from tqdm import tqdm
 
 @classyclick.command()
 class Push:
-    input: Path = classyclick.argument()
-    index: str = classyclick.option(default='pocketmoney-transactions')
-    os_host: str = classyclick.option(default='localhost')
-    os_port: int = classyclick.option(default=9200)
-    osd_host: str = classyclick.option(default='localhost')
-    osd_port: int = classyclick.option(default=5601)
-    dashboard: Path = classyclick.option(default='dashboard.ndjson', help='Path to the dashboard export')
-    reset: bool = classyclick.option(help='Reset the index and re-import the dashboard, even if they already exist')
+    input: Path = classyclick.Argument()
+    index: str = classyclick.Option(default='pocketmoney-transactions')
+    os_host: str = classyclick.Option(default='localhost')
+    os_port: int = classyclick.Option(default=9200)
+    osd_host: str = classyclick.Option(default='localhost')
+    osd_port: int = classyclick.Option(default=5601)
+    dashboard: Path = classyclick.Option(default='dashboard.ndjson', help='Path to the dashboard export')
+    reset: bool = classyclick.Option(help='Reset the index and re-import the dashboard, even if they already exist')
 
     @cached_property
     def data(self):
@@ -172,4 +172,4 @@ class OSDClient(requests.Session):
 
 
 if __name__ == '__main__':
-    Push()
+    Push.click()

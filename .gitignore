@@ -1,7 +1,9 @@
 *.pmdb
 *.json
+*.csv
 !samples/*.json
+!samples/*.csv
 !*.sample.json
+!*.sample.csv
 __pycache__
 *.pyc
-*.csv

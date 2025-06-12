@@ -2,12 +2,13 @@
 
 import csv
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from functools import cached_property
 from pathlib import Path
 
 import classyclick
+import click
 
 
 @classyclick.command(context_settings={'show_default': True})
@@ -79,7 +80,7 @@ class Push:
             if trans['category']:
                 trans['category'] = self.categories[trans['category']]
 
-            yield Transaction(
+            yield PocketTransaction(
                 datetime.strptime(trans['transaction']['date'], '%Y-%m-%d').date(),
                 f'{trans["transaction"]["name"]} / {(trans["category"] or {}).get("name", "")}',
                 trans['amount'],
@@ -92,6 +93,8 @@ class Push:
         pocket_transactions.sort(reverse=True)
         csv_transactions.sort(reverse=True)
 
+        matched = 0
+
         for ct in csv_transactions:
             for pt in pocket_transactions:
                 if pt.matched:
@@ -100,15 +103,54 @@ class Push:
                     # don't match with more than 5 days apart
                     continue
                 if ct.amount == pt.amount:
-                    print('MATCH', ct, pt)
+                    ct.matched = pt
+                    pt.matched = ct
+                    matched += 1
+                    break
+
+        all_transactions = csv_transactions.copy()
+        # do not print out pocket transactions older than oldest csv transaction, as CSV is likely a partial export from bank
+        last_date = csv_transactions[-1].date - timedelta(days=5)
+        for pt in pocket_transactions:
+            if pt.date < last_date:
+                break
+            if not pt.matched:
+                all_transactions.append(pt)
+        all_transactions.sort(reverse=True)
+
+        for t in all_transactions:
+            if t.matched:
+                click.echo(t)
+            else:
+                click.secho(t, fg='red')
+
+        click.secho(f'Stats: {matched} matched, {len(csv_transactions) - matched} not found', fg='yellow')
 
 
-@dataclass(order=True)
+@dataclass
 class Transaction:
     date: datetime.date
     description: str
     amount: float
-    matched: 'Transaction' = None
+    matched: 'Transaction' = field(compare=False, default=None)
+
+    def __lt__(self, other):
+        if not isinstance(other, Transaction):
+            return NotImplemented
+        return (self.date, self.description, self.amount) < (other.date, other.description, other.amount)
+
+    def __eq__(self, other):
+        if not isinstance(other, Transaction):
+            return NotImplemented
+        return (self.date, self.description, self.amount) == (other.date, other.description, other.amount)
+
+    def __str__(self):
+        return f'({self.__class__.__name__}) {self.date} {self.description} {self.amount}'
+
+
+@dataclass
+class PocketTransaction(Transaction):
+    """just for tagging"""
 
 
 if __name__ == '__main__':

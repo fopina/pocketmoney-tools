@@ -34,16 +34,21 @@ Reconcile PocketMoney transactions with a CSV statement from other source (eg, *
 Flags allow specifying which columns contain the required info in the CSV
 
 ```
-$ reconciliation/reconcile.py card_transactions_record_20250611_105312.csv -a 3 --account mybank
-(PocketTransaction) 2025-06-11 Saúde / Saude -52.47
-(Transaction) 2025-06-10 Crv*Restaurante El Cap -33.2
-(Transaction) 2025-06-10 Crv*Q H Centro Leon Le -17.6
-(Transaction) 2025-06-10 Crv*Bp Combatentes Por -19.47
-(Transaction) 2025-06-10 Crv*Albany Leon Esp -3.6
-(Transaction) 2025-06-09 Crv*La Vespa 50 Leon E -50.3
-(Transaction) 2025-06-09 Crv*Cedipsa Es Melgar -71.77
-(PocketTransaction) 2025-06-08 MIA / MIA -19.4
-(Transaction) 2025-06-08 Crv*Bar Animals Ripagaina -115.6
-(Transaction) 2025-06-07 EUR Deposit 999.0
-...
+$ reconciliation/reconcile.py --help
+Usage: reconcile.py [OPTIONS] INPUT
+
+Options:
+  --pocketmoney PATH              Path to the converted JSON file  [default:
+                                  pocketmoney_db_dump.json]
+  --account TEXT                  PocketMoney account name. If not specified,
+                                  it will in all accounts
+  -f, --date-format TEXT          Date format in CSV  [default: %Y-%m-%d]
+  -d, --date-column INTEGER       0-index of the date column  [default: 0]
+  -c, --description-column INTEGER
+                                  0-index of the description column  [default:
+                                  1]
+  -a, --amount-column INTEGER     0-index of the amount column  [default: 2]
+  --help                          Show this message and exit.
 ```
+
+![Demo reconciliation](samples/demo_reconcile.png)

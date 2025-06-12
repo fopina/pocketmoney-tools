@@ -14,21 +14,21 @@ from tqdm import tqdm
 
 @classyclick.command(context_settings={'show_default': True})
 class Push:
-    input: Path = classyclick.argument()
-    table: str = classyclick.option(default='pocketmoney-transactions')
-    pg_host: str = classyclick.option(default='localhost')
-    pg_port: int = classyclick.option(default=5432)
-    pg_user: str = classyclick.option(default='postgres')
-    pg_password: str = classyclick.option(default='changeme')
-    pg_database: str = classyclick.option(default='dev')
-    grafana_host: str = classyclick.option(default='localhost')
-    grafana_port: int = classyclick.option(default=3000)
-    grafana_user: str = classyclick.option(default='admin')
-    grafana_password: str = classyclick.option(default='admin')
-    dashboard: Path = classyclick.option(
+    input: Path = classyclick.Argument()
+    table: str = classyclick.Option(default='pocketmoney-transactions')
+    pg_host: str = classyclick.Option(default='localhost')
+    pg_port: int = classyclick.Option(default=5432)
+    pg_user: str = classyclick.Option(default='postgres')
+    pg_password: str = classyclick.Option(default='changeme')
+    pg_database: str = classyclick.Option(default='dev')
+    grafana_host: str = classyclick.Option(default='localhost')
+    grafana_port: int = classyclick.Option(default=3000)
+    grafana_user: str = classyclick.Option(default='admin')
+    grafana_password: str = classyclick.Option(default='admin')
+    dashboard: Path = classyclick.Option(
         default=Path(__file__).parent / 'dashboard.sample.json', help='Path to the dashboard export'
     )
-    reset: bool = classyclick.option(help='Reset the table and re-import the dashboard, even if they already exist')
+    reset: bool = classyclick.Option(help='Reset the table and re-import the dashboard, even if they already exist')
 
     @cached_property
     def table_hash(self):
@@ -229,4 +229,4 @@ class GrafanaClient(requests.Session):
 
 
 if __name__ == '__main__':
-    Push()
+    Push.click()

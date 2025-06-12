@@ -24,9 +24,9 @@ class DBLoader:
         'ICCategory',
     }
 
-    db_path: Path = classyclick.argument()
-    output: Path = classyclick.option(default='pocketmoney_db_dump.json', help='Path to save the converted JSON file')
-    full: bool = classyclick.option(help='Dump all tables, not just the pre-defined ones')
+    db_path: Path = classyclick.Argument()
+    output: Path = classyclick.Option(default='pocketmoney_db_dump.json', help='Path to save the converted JSON file')
+    full: bool = classyclick.Option(help='Dump all tables, not just the pre-defined ones')
 
     def __call__(self):
         # Load the database
@@ -107,4 +107,4 @@ class DBLoader:
 
 
 if __name__ == '__main__':
-    DBLoader()
+    DBLoader.click()
